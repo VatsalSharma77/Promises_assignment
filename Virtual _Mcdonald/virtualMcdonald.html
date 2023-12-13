@@ -1,0 +1,137 @@
+<!-- You have recently taken a McDonald’s franchise. You, being a software developer, want to design a virtual food ordering system to handle the orders coming in. Users should be able to place orders through it. Whenever one order is complete, it should be visible on the screen with the order number.
+
+Description :-
+Create a button called 'Order Food'. Create a checkbox of multiple food items you can choose from.
+When a user clicks on order food, create a promise that will resolve after random seconds.
+Once the promise is resolved, show the image of the food in the centre and show the order id on the top right corner.
+Try to make your virtual restaurant as real as possible. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCDonald</title>
+    <style>
+        h2{
+            text-align: center;
+        }
+        #orderNumber{
+            /* border: 1px solid red; */
+            /* width: 5%;
+            height: 50px; */
+            position: absolute;
+            right: 34px;
+            top: 26px;
+        }
+        
+        #output{
+            margin: auto;
+            /* border: 1px solid blue; */
+            width: 45%;
+            /* height: 200px;  */
+        }
+        #imgcontainer{
+            margin: auto;
+            /* border: 1px solid gray;  */
+            /* margin-top: 50px; */
+             width: 50%;
+             /* height: 200px; */
+        }
+    </style>
+</head>
+<body>
+    <h2>McDonald's Food Order</h2>
+
+    <div id="output">
+        <div id="imgcontainer" ></div>
+    </div>
+
+    <div id="menu">
+    
+    <label for="">Burger</label>
+    <input type="checkbox" value="Burger">
+
+    <label for="">French Fries</label>
+    <input type="checkbox" value="French Fries">
+    
+    <label for="">Pasta</label>
+    <input type="checkbox" value="Pasta">
+
+    <label for="">Coca Cola</label>
+    <input type="checkbox" value="Coca Cola">
+    
+    <label for="">Mac Puff </label>
+    <input type="checkbox" value="Mac Puff">
+    </div>
+    <br>
+    <button onclick="order()">Order Food</button>
+    <div id="orderNumber"></div>
+</body>
+</html>
+<script>
+    let menu = document.querySelectorAll('#menu input');
+    let output = document.querySelector('#output');
+    let orderNumber = document.getElementById('orderNumber');
+    let imgcontainer = document.getElementById('imgcontainer');
+    // console.log(imgcontainer);
+    // console.log(orderNumber);
+    function order(){
+
+        let food = Array.from(menu);
+        let h3 = document.createElement("h3");
+        h3.innerText = "Processing...";
+        h3.style.textAlign = "center";
+        output.append(h3);
+
+        promiseCreate(food).then((res)=>{
+            // console.log(res);
+            let randomOrderId = Math.floor(Math.random() * 1000) + 1;
+            h3.innerText=`${res} has been ordered successfully!!`
+           
+            orderNumber.innerText = `Your Order ID - #${randomOrderId}`;
+        })
+    } 
+
+    function promiseCreate(food){
+        let img = [
+            {
+                name:"Burger",
+                url:"burger.jpeg"
+            },
+            {
+                name:"French Fries",
+                url:"fries.jpeg"
+            },
+            {
+                name:"Pasta",
+                url:"pasta.jpeg"
+            },
+            {
+                name:"Coca Cola",
+                url:"coca cola.jpeg"
+            },
+            {
+                name:"Mac Puff",
+                url:"puff.jpeg"
+            }
+        ]
+        let selectedFood = food.filter(function(ele){
+            return ele.checked;
+        })
+        let imgFilter = img.filter(function(e){
+            return e.name == selectedFood[0].value;
+        })
+       
+        let promise = new Promise((resolve, reject) => {
+            setInterval(function(){
+                
+                let image = document.createElement("img");
+                image.src = imgFilter[0].url;
+                imgcontainer.innerHTML = ''; 
+                imgcontainer.append(image);
+                resolve(selectedFood[0].value);
+            },2000)
+        })
+        return promise;
+    }    
+</script>

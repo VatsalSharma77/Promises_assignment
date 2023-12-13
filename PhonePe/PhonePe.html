@@ -1,0 +1,194 @@
+<!-- Instructions
+Mimic the payment system of phonePe using promises.
+The payment can be rejected or accepted
+On success show the same UI as shown on phonePe app.
+On Failure also show the same UI as shown on phonePe app.
+During the processing state show the Processing UI as shown on phonePe. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Pe</title>
+  <style>
+     
+    .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            /* border: 1px solid red; */
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: purple;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: large;
+        }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 style="text-align: center;">Payment Details</h2>
+    <div id="paymentForm">
+        <label for="">Card Number:</label>
+        <input type="text" id="cardNumber" placeholder="Enter card number" >
+
+        <label for="">Expiry Date:</label>
+        <input type="text" id="expiryDate" placeholder="MM/YY" >
+
+        <label for="">CVV:</label>
+        <input type="text" id="cvv" placeholder="Enter CVV" >
+
+        <label for="">Balance:</label>
+        <input type="text" id="balance" placeholder="Enter Your account balance" >
+
+        <label for="">Amount:</label>
+        <input type="text" id="amount" placeholder="Enter amount" >
+
+        <button onclick="makePayment()">Make Payment</button>
+    </div>
+    <!-- <img src="load.jpg" alt=""> -->
+    <div id="paymentStatus"></div>
+    <div id="paymentStatusIcon"></div>
+</div>
+
+</body>
+</html>
+<script>
+    let paymentForm = document.getElementById('paymentForm');
+    let h2 = document.querySelector('h2');
+    let cardNumber = document.getElementById('cardNumber');
+    let expiryDate = document.getElementById('expiryDate');
+    let cvv = document.getElementById('cvv');
+    let balance = document.getElementById('balance');
+    let amount = document.getElementById('amount');
+
+    
+    function makePayment(){
+        
+        paymentForm.innerHTML = null;
+        h2.innerText = "Processig Payment....";
+
+        let images = [
+        {
+            name:"load",
+            url : "load.jpg"
+        },
+        {
+            name:"check",
+            url : "check.png"
+        },
+        {
+            name:"wrong",
+            url:"wrong.png"
+        }
+    ]
+        let img1 = document.createElement("img");
+        img1.src = images[0].url;
+        img1.style.width = "100px"
+        img1.style.height = "100px"
+        img1.style.marginLeft = "40%"
+        paymentForm.append(h2,img1);
+        
+        promiseCreate().then((res)=>{
+            // console.log(res);
+            img1.src = images[1].url
+            h2.innerText = `Payment of ${amount.value} has Successfully Done!!`;
+
+        }).catch((error)=>{
+            // console.log(r);
+            img1.src = images[2].url
+            h2.innerText = `Payment Error!! Insufficiant Balace `;
+        });
+        
+    }
+   
+    function promiseCreate(){
+        let promise = new Promise((resolve, reject) => {
+             setTimeout(() => {
+                if (Number(balance.value) >= Number(amount.value)) {
+                        resolve(`Payment successful! Amount: ${amount.value}`);
+                    } else {
+                        reject('Payment failed. Please try again.');
+                    }
+                }, 1000);
+        })
+        return promise;
+    }
+         
+</script>
+
+        
+
+       
+
+
+        <!-- 
+    <script>
+        function makePayment() {
+            return new Promise((resolve, reject) => {
+                // Simulate a backend payment processing
+                const cardNumber = document.getElementById('cardNumber').value;
+                const expiryDate = document.getElementById('expiryDate').value;
+                const cvv = document.getElementById('cvv').value;
+                const amount = document.getElementById('amount').value;
+
+                // Perform validation and other necessary checks here
+
+                // Simulate a successful payment after a delay
+                setTimeout(() => {
+                    const isSuccess = Math.random() < 0.8; // Simulate occasional failure
+                    if (isSuccess) {
+                        resolve(`Payment successful! Amount: ${amount}`);
+                    } else {
+                        reject('Payment failed. Please try again.');
+                    }
+                }, 2000);
+            })
+            .then((message) => {
+                const paymentStatus = document.getElementById('paymentStatus');
+                paymentStatus.innerHTML = `<p>${message}</p>`;
+                displayPaymentStatusIcon(true);
+            })
+            .catch((error) => {
+                const paymentStatus = document.getElementById('paymentStatus');
+                paymentStatus.innerHTML = `<p style="color: red;">${error}</p>`;
+                displayPaymentStatusIcon(false);
+            });
+        }
+
+        function displayPaymentStatusIcon(isSuccess) {
+            const paymentStatusIcon = document.getElementById('paymentStatusIcon');
+            const iconElement = document.createElement('i');
+            iconElement.classList.add('material-icons');
+
+            if (isSuccess) {
+                iconElement.innerHTML = 'check_circle'; // Material Icon for success
+                paymentStatusIcon.innerHTML = '<p>Payment Success</p>';
+            } else {
+                iconElement.innerHTML = 'cancel'; // Material Icon for failure
+                paymentStatusIcon.innerHTML = '<p>Payment Failed</p>';
+            }
+
+            paymentStatusIcon.appendChild(iconElement);
+        }
+    </script>
+</body>
+</html> --> 
